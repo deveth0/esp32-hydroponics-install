@@ -1,0 +1,14 @@
+{
+  "name": "ESP32-hydroponics",
+  "version": "0.1",
+  "home_assistant_domain": "hydroponics",
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [
+        { "path": "esp32_bootloader_v4.bin", "offset": 0 },
+        { "path": "hydroponics-0.1_ESP32.bin", "offset": 65536 }
+      ]
+    }
+  ]
+}

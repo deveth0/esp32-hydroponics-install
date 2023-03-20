@@ -1,6 +1,153 @@
+<!DOCTYPE html>
 <html>
-
+<head>
+    <meta charset="utf-8" />
+    <title>ESP32 Hydroponics installer</title>
+    <meta
+            name="description"
+            content="Easily allow users to install ESP32 hydroponics firmware on the web."
+    />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="color-scheme" content="dark light" />
+    <style>
+        body {
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI",
+            Roboto, Ubuntu, sans-serif;
+            padding: 0;
+            margin: 0;
+            line-height: 1.4;
+        }
+        .content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+        h2 {
+            margin-top: 2em;
+        }
+        h3 {
+            margin-top: 1.5em;
+        }
+        a {
+            color: #03a9f4;
+        }
+        .invisible {
+            visibility: hidden;
+        }
+        .hidden {
+            display: none;
+        }
+        esp-web-install-button[install-unsupported] {
+            visibility: inherit;
+        }
+        .content pre {
+            max-width: 100%;
+            overflow-y: scroll;
+        }
+        .footer {
+            margin-top: 24px;
+            border-top: 1px solid #ccc;
+            padding-top: 24px;
+            text-align: center;
+        }
+        .footer .initiative {
+            font-style: italic;
+            margin-top: 16px;
+        }
+        table {
+            border-spacing: 0;
+        }
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+        .radios li {
+            list-style: none;
+            line-height: 2em;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #333;
+                color: #fff;
+            }
+            a {
+                color: #58a6ff;
+            }
+        }
+    </style>
+    <script type="module" src="https://unpkg.com/esp-web-tools@9/dist/web/install-button.js?module"></script>
+</head>
 <body>
-<h2>Hello world</h2>
+<div class="content">
+    <h1>hydroponics-ESP32 installer</h1>
+
+    <div class="flasher">
+    <ol>
+        <li>Plug in your ESP to a USB port. We will install hydroponics <span id="verstr">0.1</span> to it.</li>
+        <li id="coms">Hit "Install" and select the correct COM port. <a onclick="showSerialHelp()">No device found?</a></li>
+    </ol>
+
+    <p>Select version</p>
+
+    <select id="ver" class="btn" onchange="setManifest()">
+        <optgroup label="Alpha">
+            <option data-manifest="bin/alpha_0_1/manifest.json"
+            >0.1 alpha</option>
+        </optgroup>
+    </select>
+
+    <p class="button-row">
+        <esp-web-install-button id="inst"
+                                manifest="bin/alpha_0_1/manifest.json"
+        ></esp-web-install-button>
+    </p>
+
+    </div>
+
+    <div class="footer">
+        <a href="https://github.com/deveth0/esp32-hydroponics"
+        >ESP32 hydroponics</a
+        > &mdash;
+        Installer powered by <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a>.
+    </div>
+    <script>
+        document.querySelectorAll('input[name="type"]').forEach(radio =>
+            radio.addEventListener("change", () => {
+
+                }
+            ));
+    </script>
+
+    <script>
+        function setManifest() {
+            const sel = document.getElementById('ver');
+            const opt = sel.options[sel.selectedIndex];
+            const m = opt.dataset.manifest;
+
+            const button = document.querySelector('esp-web-install-button');
+            button.manifest = m;
+
+            document.getElementById('verstr').textContent = opt.text;
+        }
+
+        function checkSupported() {
+            if (document.getElementById('inst').hasAttribute('install-unsupported')) unsupported();
+            else setManifest();
+        }
+
+        function unsupported() {
+            document.getElementById('flasher').innerHTML = "Sorry, your browser is not yet supported!<br>Please try on Desktop Chrome or Edge.<br>"
+        }
+
+        function showSerialHelp() {
+            document.getElementById('coms').innerHTML = `Hit "Install" and select the correct COM port.<br><br>
+    You might be missing the drivers for your board.<br>
+    Here are drivers for chips commonly used in ESP boards:<br>
+    <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">CP2102 (square chip)</a><br>
+    <a href="https://github.com/nodemcu/nodemcu-devkit/tree/master/Drivers" target="_blank">CH34x (rectangular chip)</a><br><br>
+    Make sure your USB cable supports data transfer.<br><br>
+    `;
+        }
+    </script>
 </body>
 </html>
